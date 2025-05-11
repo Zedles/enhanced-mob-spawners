@@ -11,11 +11,13 @@ import net.minecraft.block.spawner.MobSpawnerLogic;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.function.Function;
 /**
  * Spawner GUI config screen. Renders the background and all the buttons. It
  * communicates with the spawner block by sending a network package with data
@@ -86,6 +88,8 @@ public class SpawnerConfigGui extends Screen {
     private short customRange;
 
     private final BlockPos pos;
+
+    private static final Function<Identifier, RenderLayer> GUI_LAYER = id -> RenderLayer.getGui();
 
     /**
      * When creating this GUI a reference to the Mob Spawner logic and BlockPos is
@@ -311,23 +315,50 @@ public class SpawnerConfigGui extends Screen {
 
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-
         super.renderBackground(context, mouseX, mouseY, delta);
 
-        context.drawTexture(SPAWNER_CONFIG_TEXTURE, width / 2 - SPAWNER_CONFIG_TEXTURE_WIDTH / 2, 5, 0, 0,
-                SPAWNER_CONFIG_TEXTURE_WIDTH, SPAWNER_CONFIG_TEXTURE_HEIGHT, SPAWNER_CONFIG_TEXTURE_WIDTH,
-                SPAWNER_CONFIG_TEXTURE_HEIGHT);
+        // Tela de configuração do spawner
+        context.drawTexture(
+            GUI_LAYER,                        // <– nosso lambda aqui
+            SPAWNER_CONFIG_TEXTURE,
+            width  / 2 - SPAWNER_CONFIG_TEXTURE_WIDTH  / 2,
+            5,
+            0f, 0f,
+            SPAWNER_CONFIG_TEXTURE_WIDTH,
+            SPAWNER_CONFIG_TEXTURE_HEIGHT,
+            SPAWNER_CONFIG_TEXTURE_WIDTH,
+            SPAWNER_CONFIG_TEXTURE_HEIGHT
+        );
 
-        // Render spawner title text
+        // Título
         int length = TITLE_TEXT.getString().length() * 2;
-        context.drawTextWithShadow(client.textRenderer, TITLE_TEXT, width / 2 - length - 3, 33, 0xFFD964);
+        context.drawTextWithShadow(
+            client.textRenderer,
+            TITLE_TEXT,
+            width / 2 - length - 3,
+            33,
+            0xFFD964
+        );
 
-        // Render spawns icon and text (only if enabled in config)
+        // Ícone de spawns limitados
         if (limitedSpawns) {
-            context.drawTexture(SPAWNS_ICON_TEXTURE, width / 2 - 7 + 101, 23, 0, 0, 14, 14, 14, 14);
-            context.drawTextWithShadow(client.textRenderer,
-                    Text.literal("" + (ConfigValues.get("limited_spawns_amount") - spawns)), width / 2 + 114, 27,
-                    0xFFFFFF);
+            context.drawTexture(
+                GUI_LAYER,
+                SPAWNS_ICON_TEXTURE,
+                width / 2 + 94,
+                23,
+                0f, 0f,
+                14, 14,
+                14, 14
+            );
+
+            context.drawTextWithShadow(
+                client.textRenderer,
+                Text.literal("" + (ConfigValues.get("limited_spawns_amount") - spawns)),
+                width / 2 + 114,
+                27,
+                0xFFFFFF
+            );
         }
     }
 
