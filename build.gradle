@@ -19,14 +19,25 @@ repositories {
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // versões em gradle.properties
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings  "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    //modImplementation "net.fabricmc.fabric-loader:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
+    // Fabric API runtime
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-item-api-v1:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-item-group-api-v1:${project.fabric_version}"
+
+    // Data-Generation API apenas em tempo de compilação
+    modCompileOnly "net.fabricmc.fabric-api:fabric-data-generation-api-v1:22.0.6+5d559cbc96"
+}
+ 
+
+fabricApi {
+    configureDataGeneration() {
+        client = true
+    }
 }
 
 processResources {
