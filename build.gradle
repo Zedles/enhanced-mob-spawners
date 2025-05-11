@@ -16,6 +16,8 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	maven { url = "https://maven.fabricmc.net/" }
+    mavenCentral()
 }
 
 dependencies {
@@ -29,7 +31,10 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-item-api-v1:${project.fabric_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-item-group-api-v1:${project.fabric_version}"
 
-    // Data-Generation API apenas em tempo de compilação
+	//Fabric Loader API só em compile-time
+	modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
+    
+	// Data-Generation API apenas em tempo de compilação
     modCompileOnly "net.fabricmc.fabric-api:fabric-data-generation-api-v1:22.0.6+5d559cbc96"
 }
  
