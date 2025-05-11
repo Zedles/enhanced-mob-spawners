@@ -29,7 +29,12 @@ import net.minecraft.server.world.ServerWorld;
 public class MobEntityDropsMixin {
 
     @Inject(at = @At("HEAD"), method = "dropLoot", cancellable = true)
-    private void onDropLoot(DamageSource source, boolean causedByPlayer, CallbackInfo ci) {
+    private void onDropLoot(
+        ServerWorld   world,          // ← acrescentar este parâmetro
+        DamageSource  source,
+        boolean       causedByPlayer,
+        CallbackInfo  ci
+    ) {
 
         // Leave if eggs should only drop when killed by a player
         if (ConfigValues.get("monster_egg_only_drop_when_killed_by_player") == 1 && !causedByPlayer)
@@ -41,7 +46,7 @@ public class MobEntityDropsMixin {
             return;
 
         MobEntity entity = (MobEntity) (Object) this;
-        ServerWorld world = (ServerWorld) entity.getEntityWorld();
+        //ServerWorld world = (ServerWorld) entity.getEntityWorld();
 
         EntityType<?> entityType = entity.getType();
         String entityString = EntityType.getId(entityType).toString();
