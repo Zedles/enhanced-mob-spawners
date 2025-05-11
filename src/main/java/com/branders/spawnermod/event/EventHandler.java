@@ -1,6 +1,7 @@
 package com.branders.spawnermod.event;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.branders.spawnermod.SpawnerMod;
@@ -70,7 +71,8 @@ public class EventHandler {
         if (!source.isBuiltin())
             return true;
 
-        if (Blocks.SPAWNER.getLootTableKey() != key)
+        Optional<RegistryKey<LootTable>> optKey = Blocks.SPAWNER.getLootTableKey();
+        if (optKey.isPresent() && !optKey.get().equals(key))
             return true;
 
         // create new pool with silk touch condition
