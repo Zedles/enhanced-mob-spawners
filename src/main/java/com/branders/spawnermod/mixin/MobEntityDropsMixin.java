@@ -28,8 +28,8 @@ import net.minecraft.server.world.ServerWorld;
 @Mixin(MobEntity.class)
 public class MobEntityDropsMixin {
 
-    @Inject(at = @At("HEAD"), method = "dropLoot(Lnet/minecraft/entity/damage/DamageSource;Z)V", cancellable = true)
-    private void dropLoot(DamageSource source, boolean causedByPlayer, CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "dropLoot", cancellable = true)
+    private void onDropLoot(DamageSource source, boolean causedByPlayer, CallbackInfo ci) {
 
         // Leave if eggs should only drop when killed by a player
         if (ConfigValues.get("monster_egg_only_drop_when_killed_by_player") == 1 && !causedByPlayer)

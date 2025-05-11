@@ -25,17 +25,8 @@ import net.minecraft.world.World;
 @Mixin(AbstractBlock.class)
 public class UpdateNeighborMixin {
 
-    @Inject(
-            at = @At("HEAD"),
-            method = "neighborUpdate("
-                    + "Lnet/minecraft/block/BlockState;"
-                    + "Lnet/minecraft/world/World;"
-                    + "Lnet/minecraft/util/math/BlockPos;"
-                    + "Lnet/minecraft/block/Block;"
-                    + "Lnet/minecraft/util/math/BlockPos;"
-                    + "Z"
-                    + ")V")
-    private void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify, CallbackInfo ci) {
+    @Inject(at = @At("HEAD"),method = "neighborUpdate")
+    private void onNeighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify, CallbackInfo ci) {
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         for(Direction dir : Direction.values()) {
             mutable.set(sourcePos, dir);
