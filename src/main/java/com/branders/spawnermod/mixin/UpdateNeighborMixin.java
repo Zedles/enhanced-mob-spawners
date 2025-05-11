@@ -14,7 +14,7 @@ import net.minecraft.block.SpawnerBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-
+import net.minecraft.world.block.WireOrientation;
 /**
  * 	Redstone event for Spawner.
  * 
@@ -25,11 +25,19 @@ import net.minecraft.world.World;
 @Mixin(AbstractBlock.class)
 public class UpdateNeighborMixin {
 
-    @Inject(at = @At("HEAD"),method = "neighborUpdate")
-    private void onNeighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify, CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "neighborUpdate", cancellable = true)
+    private void onNeighborUpdate(
+        BlockState state,
+        World world,
+        BlockPos pos,
+        Block sourceBlock,
+        WireOrientation orientation,  // <— parâmetro correto
+        boolean notify,
+        CallbackInfo ci
+    ) {
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         for(Direction dir : Direction.values()) {
-            mutable.set(sourcePos, dir);
+            mutable.set(pos, dir);
             if(world.getBlockState(mutable).getBlock() instanceof SpawnerBlock) {
                 EventHandler.updateNeighbor(mutable, (World)world);
             }
