@@ -324,7 +324,7 @@ public class EventHandler {
 
     public LootCondition.Builder createSilkTouchCondition(RegistryWrapper.WrapperLookup registries) {
 
-        RegistryWrapper.Impl<Enchantment> impl = registries.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
+        RegistryWrapper.Impl<Enchantment> impl = registries.getOrThrow(RegistryKeys.ENCHANTMENT);
 
         return MatchToolLootCondition
                 .builder(ItemPredicate.Builder.create().subPredicate(ItemSubPredicateTypes.ENCHANTMENTS,
